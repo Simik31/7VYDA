@@ -52,9 +52,6 @@ if ($teacher->num_rows === 1) {
     $_SESSION["role"] = "pedagog";
     $_SESSION["Name"] = $teacher["tituly_pred_jmenem"] . " " . $teacher["jmeno"] . " " . $teacher["prijmeni"] . ", " . $teacher["tituly_za_jmenem"];
     $_SESSION["index"] = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
-    if($_SERVER['HTTP_HOST'] === 'localhost') {
-        $_SESSION["index"] .= "/Seminarka/";
-    }
     header("Location: ".$_SESSION["index"]);
     exit;
 }
@@ -78,9 +75,6 @@ if ($student->num_rows === 1) {
     $_SESSION["role"] = "student";
     $_SESSION["Name"] = $student["jmeno"] . " " . $student["prijmeni"];
     $_SESSION["index"] = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
-    if($_SERVER['HTTP_HOST'] === 'localhost') {
-        $_SESSION["index"] .= "/Seminarka/";
-    }
     header("Location: " . $_SESSION["index"]);
     exit;
 }
