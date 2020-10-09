@@ -32,6 +32,8 @@ if(!($teachers = $conn->prepare("SELECT * FROM `pedagogove` WHERE `jmeno` = ? AN
     exit;
 }
 
+$password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+
 $teachers->bind_param("ss", $name, $surname);
 $teachers->execute();
 $teacher = $teachers->get_result();
@@ -39,7 +41,7 @@ $teachers->close();
 if ($teacher->num_rows === 1) {
     $teacher = $teacher->fetch_assoc();
 
-    if ($teacher["heslo"] !== $_POST["password"]) {
+    if (password_verify($teacher["heslo"], $password)) {
         $_SESSION["error"] = "Chybné uživatelské jméno nebo heslo.";
         header("Location: ../index.php");
         exit;
@@ -52,6 +54,9 @@ if ($teacher->num_rows === 1) {
     $_SESSION["role"] = "pedagog";
     $_SESSION["Name"] = $teacher["tituly_pred_jmenem"] . " " . $teacher["jmeno"] . " " . $teacher["prijmeni"] . ", " . $teacher["tituly_za_jmenem"];
     $_SESSION["index"] = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
+    if($_SERVER['HTTP_HOST'] === 'localhost') {
+        $_SESSION["index"] .= "/Seminarka/";
+    }
     header("Location: ".$_SESSION["index"]);
     exit;
 }
@@ -62,7 +67,7 @@ $student = $students->get_result();
 $students->close();
 if ($student->num_rows === 1) {
     $student = $student->fetch_assoc();
-    if ($student["heslo"] !== $_POST["password"]) {
+    if (password_verify($student["heslo"], $password)) {
         $_SESSION["error"] = "Chybné uživatelské jméno nebo heslo.";
         header("Location: ../index.php");
         exit;
@@ -75,6 +80,9 @@ if ($student->num_rows === 1) {
     $_SESSION["role"] = "student";
     $_SESSION["Name"] = $student["jmeno"] . " " . $student["prijmeni"];
     $_SESSION["index"] = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
+    if($_SERVER['HTTP_HOST'] === 'localhost') {
+        $_SESSION["index"] .= "/Seminarka/";
+    }
     header("Location: " . $_SESSION["index"]);
     exit;
 }

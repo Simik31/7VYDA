@@ -10,16 +10,16 @@ if(!isset($_SESSION)) {
 function connect()
 {
     if($_SERVER['HTTP_HOST'] === "localhost") {
-        $host = "";
-        $username = "";
-        $password = "";
-        $database = "";
+        $host = "localhost";
+        $username = "sem";
+        $password = "org6RlBEZMTsmb1g";
+        $database = "vydap_projekt";
     }
     else {
-        $host = "";
-        $username = "";
-        $password = "";
-        $database = "";
+        $host = "sql4.webzdarma.cz";
+        $username = "simara7westr8346";
+        $password = "9455I4At)_,5vkDWlL3_";
+        $database = "simara7westr8346";
     }
 
     $conn = new mysqli($host, $username, $password, $database);
