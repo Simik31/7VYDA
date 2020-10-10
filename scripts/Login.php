@@ -32,8 +32,6 @@ if(!($teachers = $conn->prepare("SELECT * FROM `pedagogove` WHERE `jmeno` = ? AN
     exit;
 }
 
-$password = password_hash($_POST["password"], PASSWORD_BCRYPT);
-
 $teachers->bind_param("ss", $name, $surname);
 $teachers->execute();
 $teacher = $teachers->get_result();
@@ -41,7 +39,7 @@ $teachers->close();
 if ($teacher->num_rows === 1) {
     $teacher = $teacher->fetch_assoc();
 
-    if (password_verify($teacher["heslo"], $password)) {
+    if (!password_verify($_POST["password"], $teacher["heslo"])) {
         $_SESSION["error"] = "Chybné uživatelské jméno nebo heslo.";
         header("Location: ../index.php");
         exit;
@@ -67,7 +65,7 @@ $student = $students->get_result();
 $students->close();
 if ($student->num_rows === 1) {
     $student = $student->fetch_assoc();
-    if (password_verify($student["heslo"], $password)) {
+    if (!password_verify($_POST["password"], $student["heslo"])) {
         $_SESSION["error"] = "Chybné uživatelské jméno nebo heslo.";
         header("Location: ../index.php");
         exit;
